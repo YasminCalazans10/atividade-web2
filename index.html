@@ -1,123 +1,469 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Abyss Armada — Edição Épica</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Primeiros Socorros para Iniciantes no GitHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF3F2;
+    --card:#FFFFFF;
+    --ink:#12211F;
+    --muted:#5C6B68;
+    --alert:#E8481C;
+    --alert-soft:#FCE3D8;
+    --mint:#1F8A70;
+    --mint-soft:#DCEFE9;
+    --line:#D3DEDB;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(18,33,31,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+  }
+
+  .sheet{
+    max-width:920px;
+    margin:0 auto;
+    padding:48px 32px 64px;
+  }
+
+  /* ---------- HEADER / TRIAGE CARD ---------- */
+  .chart{
+    background:var(--card);
+    border:1.5px solid var(--ink);
+    border-radius:14px;
+    box-shadow: 6px 6px 0 var(--ink);
+    overflow:hidden;
+    margin-bottom:40px;
+  }
+
+  .chart-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 20px;
+    background:var(--ink);
+    color:var(--bg);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+
+  .chart-top .dot{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .chart-top .dot::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--alert);
+    box-shadow:0 0 0 3px rgba(232,72,28,0.25);
+  }
+
+  .chart-body{
+    padding:36px 32px 30px;
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--alert);
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    margin:0 0 14px;
+  }
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(30px, 5vw, 46px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:0 0 16px;
+    text-transform:lowercase;
+  }
+
+  .subtitle{
+    font-size:17px;
+    color:var(--muted);
+    max-width:56ch;
+    margin:0 0 28px;
+  }
+
+  /* ECG -> commit graph signature */
+  .vitals{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+  .vitals path{
+    fill:none;
+    stroke:var(--mint);
+    stroke-width:2.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-dasharray:900;
+    stroke-dashoffset:900;
+    animation: draw 2.4s ease-out forwards;
+  }
+  .vitals circle{
+    fill:var(--alert);
+    opacity:0;
+    animation: pop 0.4s ease-out forwards;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  @keyframes pop{ to{ opacity:1; } }
+  .vitals circle:nth-of-type(1){animation-delay:1.0s;}
+  .vitals circle:nth-of-type(2){animation-delay:1.4s;}
+  .vitals circle:nth-of-type(3){animation-delay:1.8s;}
+  .vitals circle:nth-of-type(4){animation-delay:2.2s;}
+
+  .vitals-caption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--muted);
+    display:flex;
+    justify-content:space-between;
+    margin-top:6px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .vitals path{ animation:none; stroke-dashoffset:0; }
+    .vitals circle{ animation:none; opacity:1; }
+  }
+
+  /* ---------- SECTION INTRO ---------- */
+  .section-intro{
+    margin:8px 0 26px;
+  }
+  .section-intro h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:22px;
+    margin:0 0 6px;
+  }
+  .section-intro p{
+    color:var(--muted);
+    margin:0;
+    font-size:15px;
+    max-width:62ch;
+  }
+
+  /* ---------- CASE CARDS ---------- */
+  .cases{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    margin-bottom:44px;
+  }
+
+  .case{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:4px solid var(--alert);
+    border-radius:10px;
+    padding:20px 22px;
+    position:relative;
+  }
+
+  .case-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:8px;
+    flex-wrap:wrap;
+  }
+
+  .case-plus{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--mint);
+    font-weight:600;
+    font-size:15px;
+  }
+
+  .case-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--alert);
+    font-weight:600;
+  }
+
+  .case h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:18px;
+    font-weight:600;
+    margin:2px 0 12px;
+  }
+
+  .rx-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--mint);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+
+  .code{
+    background:var(--ink);
+    color:#DFF2EC;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13.5px;
+    padding:12px 14px;
+    border-radius:8px;
+    overflow-x:auto;
+    white-space:pre;
+    margin:0 0 10px;
+  }
+  .code .comment{ color:#8FA79F; }
+
+  .note{
+    font-size:14px;
+    color:var(--muted);
+    margin:0;
+  }
+  .note strong{ color:var(--ink); }
+
+  /* ---------- GLOSSARY ---------- */
+  .glossary{
+    background:var(--mint-soft);
+    border:1px solid var(--mint);
+    border-radius:12px;
+    padding:26px 28px 22px;
+    margin-bottom:36px;
+  }
+  .glossary h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:20px;
+    margin:0 0 4px;
+  }
+  .glossary p.lead{
+    color:var(--muted);
+    font-size:14px;
+    margin:0 0 18px;
+  }
+  .terms{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:14px 24px;
+  }
+  .term dt{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:13.5px;
+    color:var(--ink);
+    margin-bottom:2px;
+  }
+  .term dd{
+    margin:0;
+    font-size:13.5px;
+    color:var(--muted);
+  }
+  @media (max-width:600px){
+    .terms{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    text-align:center;
+    padding-top:8px;
+  }
+  footer .stamp{
+    display:inline-block;
+    border:1.5px dashed var(--alert);
+    color:var(--alert);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:8px 16px;
+    border-radius:8px;
+    transform:rotate(-1.5deg);
+    margin-bottom:10px;
+  }
+  footer p{
+    color:var(--muted);
+    font-size:13.5px;
+    margin:0;
+  }
+
+  @media (max-width:600px){
+    .sheet{ padding:28px 16px 48px; }
+    .chart-body{ padding:26px 20px 24px; }
+  }
+</style>
 </head>
 <body>
-  <!-- Cinematic Intro -->
-  <div id="cinema-intro" class="screen active">
-    <div class="intro-overlay">
-      <h1 class="logo">Abyss Armada</h1>
-      <p class="intro-text">As tribos vikings se enfrentam pelo domínio dos mares gelados...</p>
-      <button id="intro-continue" class="btn">Iniciar</button>
-    </div>
-  </div>
 
-  <!-- Level Selection -->
-  <div id="level-screen" class="screen">
-    <div class="panel">
-      <h2>Escolha o Nível de Dificuldade</h2>
-      <div class="level-selection">
-        <button id="level-easy" class="btn level-btn">
-          <h3>Fácil</h3>
-          <p class="level-desc">"A primeira viagem dos jovens guerreiros"</p>
-          <p class="level-info">Tabuleiro menor<br/>Menos navios</p>
-        </button>
-        <button id="level-medium" class="btn level-btn">
-          <h3>Médio</h3>
-          <p class="level-desc">"A grande frota de Ragnar Lothbrok"</p>
-          <p class="level-info">Tabuleiro maior<br/>Mais navios</p>
-        </button>
-        <button id="level-hard" class="btn level-btn">
-          <h3>Difícil</h3>
-          <p class="level-desc">"O desafio dos mares gelados de Odin"</p>
-          <p class="level-info">Tabuleiro grande<br/>Menos navios</p>
-          teste
-        </button>
+<div class="sheet">
+
+  <div class="chart">
+    <div class="chart-top">
+      <span class="dot">status: em pânico, mas estável</span>
+      <span>ficha nº git-001</span>
+    </div>
+    <div class="chart-body">
+      <p class="eyebrow">pronto-socorro para devs</p>
+      <h1>primeiros socorros para iniciantes no github</h1>
+      <p class="subtitle">Você apertou enter, algo deu errado, e o terminal parece estar te julgando. Respira. Nenhum commit é fatal, este é o seu kit de emergência para os sustos mais comuns de quem está começando.</p>
+
+      <svg class="vitals" viewBox="0 0 860 90" preserveAspectRatio="none" role="img" aria-label="Linha de batimento que se transforma em grafo de commits do git">
+        <path d="M0,45 L120,45 L145,10 L170,80 L195,45 L340,45 L360,20 L380,45 L520,45 L540,45 L560,45 L680,45 L680,45 L860,45"/>
+        <circle cx="560" cy="45" r="5"/>
+        <circle cx="620" cy="45" r="5"/>
+        <circle cx="680" cy="45" r="5"/>
+        <circle cx="740" cy="45" r="5"/>
+      </svg>
+      <div class="vitals-caption">
+        <span>batimento do repositório</span>
+        <span>main ● 4 commits estáveis</span>
       </div>
     </div>
   </div>
 
-  <!-- Start / Player names -->
-  <div id="start-screen" class="screen">
-    <div class="panel">
-      <h2>Abyss Armada</h2>
-      <div class="player-inputs">
-        <label>Jogador 1 (Viking): <input id="player1-name" placeholder="Ragnar Lothbrok" /></label>
-        <label>Jogador 2 (Berserker): <input id="player2-name" placeholder="Ivar, o Desossado" /></label>
-      </div>
-      <div class="controls">
-        <button id="start-game-button" class="btn">Iniciar Jogo</button>
-        <button id="vs-cpu" class="btn secondary">Jogar contra CPU</button>
-        <button id="quick-mode" class="btn secondary">Modo Rápido</button>
-      </div>
-      <p style="margin-top:10px; font-size:13px; opacity:0.8;">Dica: clique em "Jogar contra CPU" para enfrentar a IA.</p>
-    </div>
+  <div class="section-intro">
+    <h2>Sala de emergência</h2>
+    <p>Seis crises clássicas de quem está começando no Git e no GitHub, com o sintoma, o motivo do susto e o tratamento exato, linha de comando na mão.</p>
   </div>
 
-  <!-- Placement -->
-  <div id="placement-screen" class="screen">
-    <div class="panel">
-      <h3 id="placement-player-name">Posicionamento</h3>
-      <div id="placement-stage">
-        <div id="ships-to-place"></div>
-        <div id="placement-grid" class="grid"></div>
+  <div class="cases">
+
+    <div class="case">
+      <div class="case-head">
+        <span class="case-plus">✚</span>
+        <span class="case-tag">Caso 01 · Commit errado</span>
       </div>
-      <div class="placement-controls">
-        <button id="rotate-ship-button" class="btn">Rotacionar</button>
-        <button id="confirm-placement-button" class="btn" disabled>Confirmar</button>
-      </div>
+      <h3>"Comitei e já quero desfazer tudo"</h3>
+      <p class="rx-label">Tratamento</p>
+      <div class="code"><span class="comment"># desfaz o commit, mas mantém suas alterações intactas</span>
+git reset --soft HEAD~1</div>
+      <p class="note">Nada foi apagado. Suas mudanças voltam para a "sala de espera" (staging), prontas para um novo commit, mais caprichado.</p>
     </div>
+
+    <div class="case">
+      <div class="case-head">
+        <span class="case-plus">✚</span>
+        <span class="case-tag">Caso 02 · Mensagem constrangedora</span>
+      </div>
+      <h3>"Escrevi uma mensagem de commit horrível"</h3>
+      <p class="rx-label">Tratamento</p>
+      <div class="code">git commit --amend -m "mensagem nova e decente"</div>
+      <p class="note">Funciona só antes do <strong>push</strong>. Depois de publicado, reescrever a história pede mais cuidado (e uma conversa com o time).</p>
+    </div>
+
+    <div class="case">
+      <div class="case-head">
+        <span class="case-plus">✚</span>
+        <span class="case-tag">Caso 03 · Conflito de merge</span>
+      </div>
+      <h3>"Editei sem puxar as mudanças antes"</h3>
+      <p class="rx-label">Tratamento</p>
+      <div class="code"><span class="comment"># traga as novidades do time</span>
+git pull
+
+<span class="comment"># abra os arquivos marcados e escolha o que fica</span>
+git add .
+git commit -m "resolve conflito"</div>
+      <p class="note">Um conflito não é um erro, é o Git avisando que duas pessoas mexeram no mesmo lugar. Ele só precisa que você decida quem fica.</p>
+    </div>
+
+    <div class="case">
+      <div class="case-head">
+        <span class="case-plus">✚</span>
+        <span class="case-tag">Caso 04 · Arquivo sumido</span>
+      </div>
+      <h3>"Apaguei um arquivo sem querer"</h3>
+      <p class="rx-label">Tratamento</p>
+      <div class="code"><span class="comment"># antes de commitar a exclusão</span>
+git restore nome-do-arquivo</div>
+      <p class="note">Enquanto não houver commit confirmando o sumiço, o arquivo está só "desaparecido", não morto.</p>
+    </div>
+
+    <div class="case">
+      <div class="case-head">
+        <span class="case-plus">✚</span>
+        <span class="case-tag">Caso 05 · Pânico geral</span>
+      </div>
+      <h3>"Preciso salvar meu trabalho antes que algo trave"</h3>
+      <p class="rx-label">Tratamento</p>
+      <div class="code"><span class="comment"># o trio básico de sobrevivência</span>
+git add .
+git commit -m "descreva o que mudou"
+git push</div>
+      <p class="note">Decore essas três linhas. Elas resolvem 80% dos sustos do dia a dia.</p>
+    </div>
+
+    <div class="case">
+      <div class="case-head">
+        <span class="case-plus">✚</span>
+        <span class="case-tag">Caso 06 · Perdido na branch errada</span>
+      </div>
+      <h3>"Criei uma branch errada e me perdi"</h3>
+      <p class="rx-label">Tratamento</p>
+      <div class="code"><span class="comment"># volte para o caminho conhecido</span>
+git checkout main
+
+<span class="comment"># e, se quiser, remova a branch perdida</span>
+git branch -d nome-da-branch</div>
+      <p class="note">Branches são só rascunhos paralelos. Trocar de uma para outra não apaga nada do seu trabalho salvo.</p>
+    </div>
+
   </div>
 
-  <!-- Game Screen -->
-  <div id="game-screen" class="screen">
-    <div class="hud-top">
-      <div class="player-info">
-        <div class="player-name" id="p1-info"></div>
+  <div class="glossary">
+    <h2>Ficha de vocabulário do paciente</h2>
+    <p class="lead">Termos que todo iniciante ouve antes de entender, tradução rápida:</p>
+    <dl class="terms">
+      <div class="term">
+        <dt>repositório (repo)</dt>
+        <dd>a pasta do projeto, com toda a história de mudanças guardada.</dd>
       </div>
-      <div class="center-panel">
-        <div id="turn-banner">É a vez de <span id="turn-name"></span>!</div>
-        <div id="combo">Combo: <span id="combo-count">0</span></div>
+      <div class="term">
+        <dt>commit</dt>
+        <dd>uma foto do projeto naquele momento, com uma etiqueta explicando o que mudou.</dd>
       </div>
-      <div class="player-info right">
-        <div class="player-name" id="p2-info"></div>
+      <div class="term">
+        <dt>branch</dt>
+        <dd>uma linha do tempo paralela, pra testar coisas sem bagunçar a principal.</dd>
       </div>
-    </div>
-
-    <div id="boards" class="boards-centered">
-      <div class="board-wrap">
-        <h4><span id="current-player1"></span></h4>
-        <div id="player1-grid" class="grid"></div>
+      <div class="term">
+        <dt>pull request</dt>
+        <dd>o pedido formal de "posso juntar minha branch com a sua?".</dd>
       </div>
-      <div class="board-wrap">
-        <h4><span id="current-player2"></span></h4>
-        <div id="player2-grid" class="grid"></div>
+      <div class="term">
+        <dt>merge</dt>
+        <dd>o momento em que duas linhas do tempo viram uma só.</dd>
       </div>
-    </div>
+      <div class="term">
+        <dt>clone</dt>
+        <dd>copiar um repositório inteiro, com história e tudo, pro seu computador.</dd>
+      </div>
+    </dl>
   </div>
 
-  <!-- End Screen -->
-  <div id="end-screen" class="screen">
-    <div class="panel">
-      <h1 id="winner-display">Vencedor</h1>
-      <button id="restart-game-button" class="btn">Jogar Novamente</button>
-    </div>
-  </div>
+  <footer>
+    <div class="stamp">nenhum código foi seriamente ferido</div>
+    <p>Respire. Todo desenvolvedor já gritou com o terminal pelo menos uma vez.</p>
+  </footer>
 
-  <audio id="audio-inicio" src="sons/inicio.mp3" loop></audio>
-  <audio id="audio-base" src="sons/base.mp3" loop></audio>
-  <audio id="audio-marine" src="sons/base.mp3" loop></audio>
-  <audio id="audio-trovao" src="sons/base.mp3"></audio>
-  <audio id="audio-flecha" src="sons/flecha.wav"></audio>
-  <audio id="audio-explode" src="sons/explosao.mp3"></audio>
-  <audio id="audio-furia" src="sons/ira.mp3"></audio>
-  <audio id="audio-grito" src="sons/ira.mp3"></audio>
-  <audio id="audio-splash" src="sons/onda.mp3"></audio>
+</div>
 
-  <script src="script.js"></script>
 </body>
 </html>
