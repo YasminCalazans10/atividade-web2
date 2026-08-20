@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Abyss Armada — Edição Épica</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Cinematic Intro -->
+  <div id="cinema-intro" class="screen active">
+    <div class="intro-overlay">
+      <h1 class="logo">Abyss Armada</h1>
+      <p class="intro-text">As tribos vikings se enfrentam pelo domínio dos mares gelados...</p>
+      <button id="intro-continue" class="btn">Iniciar</button>
+    </div>
+  </div>
+
+  <!-- Level Selection -->
+  <div id="level-screen" class="screen">
+    <div class="panel">
+      <h2>Escolha o Nível de Dificuldade</h2>
+      <div class="level-selection">
+        <button id="level-easy" class="btn level-btn">
+          <h3>Fácil</h3>
+          <p class="level-desc">"A primeira viagem dos jovens guerreiros"</p>
+          <p class="level-info">Tabuleiro menor<br/>Menos navios</p>
+        </button>
+        <button id="level-medium" class="btn level-btn">
+          <h3>Médio</h3>
+          <p class="level-desc">"A grande frota de Ragnar Lothbrok"</p>
+          <p class="level-info">Tabuleiro maior<br/>Mais navios</p>
+        </button>
+        <button id="level-hard" class="btn level-btn">
+          <h3>Difícil</h3>
+          <p class="level-desc">"O desafio dos mares gelados de Odin"</p>
+          <p class="level-info">Tabuleiro grande<br/>Menos navios</p>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Start / Player names -->
+  <div id="start-screen" class="screen">
+    <div class="panel">
+      <h2>Abyss Armada</h2>
+      <div class="player-inputs">
+        <label>Jogador 1 (Viking): <input id="player1-name" placeholder="Ragnar Lothbrok" /></label>
+        <label>Jogador 2 (Berserker): <input id="player2-name" placeholder="Ivar, o Desossado" /></label>
+      </div>
+      <div class="controls">
+        <button id="start-game-button" class="btn">Iniciar Jogo</button>
+        <button id="vs-cpu" class="btn secondary">Jogar contra CPU</button>
+        <button id="quick-mode" class="btn secondary">Modo Rápido</button>
+      </div>
+      <p style="margin-top:10px; font-size:13px; opacity:0.8;">Dica: clique em "Jogar contra CPU" para enfrentar a IA.</p>
+    </div>
+  </div>
+
+  <!-- Placement -->
+  <div id="placement-screen" class="screen">
+    <div class="panel">
+      <h3 id="placement-player-name">Posicionamento</h3>
+      <div id="placement-stage">
+        <div id="ships-to-place"></div>
+        <div id="placement-grid" class="grid"></div>
+      </div>
+      <div class="placement-controls">
+        <button id="rotate-ship-button" class="btn">Rotacionar</button>
+        <button id="confirm-placement-button" class="btn" disabled>Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game-screen" class="screen">
+    <div class="hud-top">
+      <div class="player-info">
+        <div class="player-name" id="p1-info"></div>
+      </div>
+      <div class="center-panel">
+        <div id="turn-banner">É a vez de <span id="turn-name"></span>!</div>
+        <div id="combo">Combo: <span id="combo-count">0</span></div>
+      </div>
+      <div class="player-info right">
+        <div class="player-name" id="p2-info"></div>
+      </div>
+    </div>
+
+    <div id="boards" class="boards-centered">
+      <div class="board-wrap">
+        <h4><span id="current-player1"></span></h4>
+        <div id="player1-grid" class="grid"></div>
+      </div>
+      <div class="board-wrap">
+        <h4><span id="current-player2"></span></h4>
+        <div id="player2-grid" class="grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- End Screen -->
+  <div id="end-screen" class="screen">
+    <div class="panel">
+      <h1 id="winner-display">Vencedor</h1>
+      <button id="restart-game-button" class="btn">Jogar Novamente</button>
+    </div>
+  </div>
+
+  <audio id="audio-inicio" src="sons/inicio.mp3" loop></audio>
+  <audio id="audio-base" src="sons/base.mp3" loop></audio>
+  <audio id="audio-marine" src="sons/base.mp3" loop></audio>
+  <audio id="audio-trovao" src="sons/base.mp3"></audio>
+  <audio id="audio-flecha" src="sons/flecha.wav"></audio>
+  <audio id="audio-explode" src="sons/explosao.mp3"></audio>
+  <audio id="audio-furia" src="sons/ira.mp3"></audio>
+  <audio id="audio-grito" src="sons/ira.mp3"></audio>
+  <audio id="audio-splash" src="sons/onda.mp3"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
